@@ -1,24 +1,29 @@
 import { ethers } from "hardhat";
+import { writeFileSync } from "fs";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const VrmNFTMarket = await ethers.getContractFactory("VrmNFTMarketplace");
+  const vrmNFTMarket = await VrmNFTMarket.deploy();
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  await vrmNFTMarket.deployed();
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const data = {
+    address: vrmNFTMarket.address,
+    abi: JSON.parse(vrmNFTMarket.interface.format("json") as string),
+  };
 
-  await lock.deployed();
-
-  console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  // This writes the ABI and address to the frontend
+  writeFileSync(
+    "frontend/public/contracts/VrmNFTMarketplace.json",
+    JSON.stringify(data, null, 2)
   );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

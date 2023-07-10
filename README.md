@@ -19,26 +19,36 @@
 - [Hardhat](https://hardhat.org)
 - [Ethers.js](https://docs.ethers.io)
 
-## 🚀 Getting Started 
+## 🚀 Getting Started
 
 1. Clone git repo
+
 ```sh
 git clone https://github.com/huketo/vrm-nft-marketplace.git
 ```
 
 2. Install package
+
 ```sh
 yarn install
 # or
 npm install
 ```
 
-3. Deploy smartcontract
+3. Start Local Node
+
 ```sh
-npx hardhat run scripts/deploy.ts --network rinkeby
+npx hardhat node
 ```
 
-4. Build front-end
+4. Deploy smartcontract
+
+```sh
+npx hardhat run scripts/deploy.ts --network localhost
+```
+
+5. Build front-end
+
 ```sh
 cd front
 yarn build
@@ -46,7 +56,8 @@ yarn build
 npm run build
 ```
 
-5. Deploy server
+6. Deploy server
+
 ```sh
 cd server
 yarn deploy
